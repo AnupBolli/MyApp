@@ -1,0 +1,90 @@
+<mvc:View displayBlock="true" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" controllerName='MyApp.MyApp.controller.App'>
+	<IconTabBar id="idIconTabBarMulti" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding" selectedKey="db">
+		<items>
+			<IconTabFilter icon="sap-icon://hint" text="Information">
+				<Carousel>
+					<pages>
+						<Image
+							src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Wikipedia_Hello_World_Graphic.svg/2000px-Wikipedia_Hello_World_Graphic.svg.png"
+							height="400px"/>
+						<Image
+							src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Wikipedia_Hello_World_Graphic.svg/2000px-Wikipedia_Hello_World_Graphic.svg.png"
+							height="400px"/>
+					</pages>
+				</Carousel>
+				<Button text="{i18n>buttonText}" press="onPress"></Button>
+				<Input id="inputText" type="Text" width="30%"
+					value="{ path: 'model1>/recipient/name', type: 'sap.ui.model.type.Float', formatOptions: {minFractionDigits: 2}, constraints: {maximum: 300} }"
+					description="{i18n>helloMsg} {model1>/recipient/name}" valueLiveUpdate="false"/>
+			</IconTabFilter>
+			<IconTabFilter id="layouts" icon="sap-icon://business-card" text="{i18n>layoutFilterTitle}">
+				<MessageStrip type="Information" showIcon="true" text="Here's a Form Layout inside an Icon Tab Bar …"/>
+				<f:SimpleForm id="simpleFormChange" title="Address" editable="true" class="editableForm">
+					<f:content>
+						<Label text="{i18n>layoutFormName}"/>
+						<Input value="{address>/Name}"/>
+						<Label text="{i18n>layoutFormStreet}"/>
+						<Input value="{address>/Street}"/>
+						<Label text="{i18n>layoutFormHouseNumber}"/>
+						<Input value="{address>/HouseNumber}"/>
+						<Label text="{i18n>layoutFormZIPCode}"/>
+						<Input value="{address>/ZIPCode}"/>
+						<Label text="{i18n>layoutFormCity}"/>
+						<Input value="{address>/City}"/>
+						<Label text="{i18n>layoutFormCountry}"/>
+						<Select>
+							<items>
+								<core:Item text="{i18n>layoutCountryGermany}"/>
+								<core:Item text="{i18n>layoutCountryUSA}"/>
+								<core:Item text="{i18n>layoutCountryEngland}"/>
+							</items>
+						</Select>
+					</f:content>
+				</f:SimpleForm>
+				<Toolbar>
+					<ToolbarSpacer width="50%"/>
+					<Button text="{i18n>layoutPublishButton}" type="Accept"/>
+					<Button text="{i18n>layoutDraftButton}"/>
+				</Toolbar>
+			</IconTabFilter>
+			<IconTabFilter text="{i18n>dataBindingFilter}" icon="sap-icon://list" key="db">
+				<content>
+					<!--<List headerText="{i18n>productListTitle}" items="{/Products}">-->
+					<List id="productList" items="{ path:'/Products', parameters:{ expand:'Supplier' }, sorter:{ path: 'ProductName' }}" growing="true"
+						growingThreshold="5" growingScrollToLoad="false">
+						<headerToolbar>
+							<Toolbar>
+								<Title text="{i18n>productListTitle}"/>
+								<ToolbarSpacer/>
+								<SearchField width="50%" search="onFilter"/>
+							</Toolbar>
+						</headerToolbar>
+						<items>
+							<ObjectListItem 
+								title="{ProductName}"
+								number="{ parts:[ {path:'UnitPrice'}, {path:'EUR'} ], type: 'sap.ui.model.type.Currency', formatOptions:{ showMeasure: false } }"
+								numberUnit="EUR" numberState="{= ${UnitsInStock} > 20 ? 'Success' : 'Error' }" press="onItemSelected" type="Active">
+								<firstStatus>
+									<ObjectStatus text="{ parts:[ {path:'UnitPrice'} ], formatter: '.fFormatter.delivery' }"/>
+								</firstStatus>
+								<!--<secondStatus>-->
+								<!--	<ObjectStatus title="{i18n>deliveredfrom}" text="{Supplier/City}"/>-->
+								<!--</secondStatus>-->
+								<ObjectAttribute title="{i18n>deliveredfrom}" text="{Supplier/City}"/>
+							</ObjectListItem>
+						</items>
+					</List>
+					<Panel id="detailPanel" headerText="{i18n>detailPanel}" visible="True">
+						<l:Grid>
+							<Text text="{i18n>ProductName}: {ProductName}"/>
+							<Text text="{i18n>SupplierID}: {SupplierID}"/>
+							<Text text="{i18n>QuantityPerUnit}: {QuantityPerUnit}"/>
+							<Text text="{i18n>UnitsInStock}: {UnitsInStock}"/>
+						</l:Grid>
+					</Panel>
+				</content>
+			</IconTabFilter>
+		</items>
+	</IconTabBar>
+</mvc:View>
